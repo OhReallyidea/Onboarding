@@ -3,58 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Merchant Onboarding</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <div class="container">
 
-    <h1>Merchant Onboarding Form</h1>
+    <div class="header">
+        <h1>Merchant Onboarding</h1>
+        <p>Complete the merchant registration below.</p>
+    </div>
 
     <form id="merchantForm">
 
-        <h2>Company Information</h2>
+        <!-- Company Information -->
 
-        <label>Company SSM Name</label>
-        <input type="text" id="companyName" required>
+        <div class="card">
 
-        <label>SSM Number</label>
-        <input type="text" id="ssmNumber">
+            <h2>🏢 Company Information</h2>
 
-        <label>Business Name</label>
-        <input type="text" id="businessName">
+            <div class="row">
 
-        <label>Store Address</label>
-        <textarea id="address"></textarea>
+                <div class="field">
+                    <label>Company SSM Name</label>
+                    <input type="text" id="companyName" required>
+                </div>
 
-        <h2>Business PIC</h2>
+                <div class="field">
+                    <label>SSM Number</label>
+                    <input type="text" id="ssmNumber">
+                </div>
 
-        <label>PIC Name</label>
-        <input type="text" id="picName">
+            </div>
 
-        <label>Phone Number</label>
-        <input type="tel" id="phone">
+            <div class="field">
+                <label>Business Name</label>
+                <input type="text" id="businessName">
+            </div>
 
-        <label>Email</label>
-        <input type="email" id="email">
+            <div class="field">
+                <label>Store Address</label>
+                <textarea id="address" rows="4"></textarea>
+            </div>
 
-        <h2>Merchant Requirements</h2>
+        </div>
 
-        <label>POS Package</label>
-        <select id="package">
-            <option>Basic</option>
-            <option>Standard</option>
-            <option>Premium</option>
-        </select>
+        <!-- PIC -->
 
-        <label>Number of POS</label>
-        <input type="number" id="posQty" value="1">
+        <div class="card">
 
-        <label>Special Requirements</label>
-        <textarea id="notes"></textarea>
+            <h2>👤 Business PIC</h2>
 
-        <button type="submit">Submit</button>
+            <div class="row">
+
+                <div class="field">
+                    <label>PIC Name</label>
+                    <input type="text" id="picName">
+                </div>
+
+                <div class="field">
+                    <label>Phone Number</label>
+                    <input type="tel" id="phone">
+                </div>
+
+            </div>
+
+            <div class="field">
+                <label>Email Address</label>
+                <input type="email" id="email">
+            </div>
+
+        </div>
+
+        <!-- Merchant -->
+
+        <div class="card">
+
+            <h2>💳 Merchant Requirements</h2>
+
+            <div class="row">
+
+                <div class="field">
+                    <label>POS Package</label>
+
+                    <select id="package">
+                        <option>Basic</option>
+                        <option>Standard</option>
+                        <option>Premium</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Number of POS</label>
+                    <input type="number" id="posQty" value="1">
+                </div>
+
+            </div>
+
+            <div class="field">
+                <label>Special Requirements</label>
+                <textarea id="notes" rows="4"></textarea>
+            </div>
+
+        </div>
+
+        <div class="button-group">
+            <button type="submit">
+                Submit Application
+            </button>
+        </div>
 
     </form>
 
