@@ -1,154 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Merchant Onboarding</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="style.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merchant Onboarding</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🏪</div>
+            <h1>Merchant Onboarding</h1>
+            <p>Complete the form below to register a new merchant.</p>
+        </div>
 
-<div class="container">
+        <form id="merchantForm">
+            <div class="section">
+                <h2>Company Information</h2>
+                
+                <div class="form-group">
+                    <label>Company SSM Name</label>
+                    <input type="text" id="companyName" placeholder="ABC Sdn. Bhd." required>
+                </div>
 
-    <div class="header">
+                <div class="form-group">
+                    <label>Business Name</label>
+                    <input type="text" id="businessName" placeholder="ABC Cafe">
+                </div>
 
-        <div class="logo">🏪</div>
+                <div class="form-group">
+                    <label>Store Address</label>
+                    <textarea id="address" rows="3" placeholder="Enter store address"></textarea>
+                </div>
+            </div>
 
-        <h1>Merchant Onboarding</h1>
+            <div class="section">
+                <h2>Business PIC</h2>
+                <div class="row">
+                    <div class="form-group">
+                        <label>PIC Name</label>
+                        <input type="text" id="picName" placeholder="John Tan" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="phone" placeholder="012-3456789" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" placeholder="john@company.com" required>
+                </div>
+            </div>
 
-        <p>
-            Complete the form below to register a new merchant.
-        </p>
+            <div class="section">
+                <h2>Merchant Requirements</h2>
+                
+                <div class="form-group">
+                    <label>POS Package</label>
+                    <select id="package">
+                        <option value="Lite">Lite</option>
+                        <option value="Standard" selected>Standard</option>
+                        <option value="Premium">Premium</option>
+                    </select>
+                </div>
 
+                <div class="form-group">
+                    <label>Number of POS Systems</label>
+                    <input type="number" id="posQty" placeholder="2" min="1" value="1">
+                </div>
+
+                <div class="form-group">
+                    <label>Special Requirements</label>
+                    <textarea id="notes" rows="3" placeholder="Any additional requests..."></textarea>
+                </div>
+            </div>
+
+            <button type="submit">Submit Application</button>
+        </form>
     </div>
 
-    <form id="merchantForm">
-
-        <div class="section">
-
-            <h2>Company Information</h2>
-
-            <div class="form-group">
-
-                <label>Company SSM Name</label>
-
-                <input
-                    type="text"
-                    id="companyName"
-                    placeholder="ABC Sdn. Bhd."
-                    required>
-
-            </div>
-
-            <div class="form-group">
-
-                <label>Business Name</label>
-
-                <input
-                    type="text"
-                    id="businessName"
-                    placeholder="ABC Cafe">
-
-            </div>
-
-            <div class="form-group">
-
-                <label>Store Address</label>
-
-                <textarea
-                    id="address"
-                    rows="4"
-                    placeholder="Enter store address"></textarea>
-
-            </div>
-
-        </div>
-
-        <div class="section">
-
-            <h2>Business PIC</h2>
-
-            <div class="row">
-
-                <div class="form-group">
-
-                    <label>PIC Name</label>
-
-                    <input
-                        type="text"
-                        id="picName"
-                        placeholder="John Tan">
-
-                </div>
-
-                <div class="form-group">
-
-                    <label>Phone Number</label>
-
-                    <input
-                        type="tel"
-                        id="phone"
-                        placeholder="012-3456789">
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="section">
-
-            <h2>Merchant Requirements</h2>
-
-            <div class="form-group">
-
-                <label>POS Package</label>
-
-                <select id="package">
-
-                    <option>Lite</option>
-
-                    <option>Standard</option>
-
-                    <option>Premium</option>
-
-                </select>
-
-            </div>
-
-            <div class="form-group">
-
-                <label>Special Requirements</label>
-
-                <textarea
-                    id="notes"
-                    rows="4"
-                    placeholder="Any additional requests..."></textarea>
-
-            </div>
-
-        </div>
-
-        <button type="submit">
-
-            Submit Application
-
-        </button>
-
-    </form>
-
-</div>
-
-<script src="script.js"></script>
-
+    <script src="script.js"></script>
 </body>
 </html>
