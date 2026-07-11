@@ -1,195 +1,189 @@
-// Get merchant ID from URL
-const urlParams = new URLSearchParams(window.location.search);
-const merchantId = urlParams.get('merchantId');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .merchant-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .info-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .info-value {
+            font-size: 15px;
+            font-weight: 500;
+            color: #1e293b;
+            margin-top: 3px;
+        }
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+            margin-bottom: 8px;
+        }
+        .task-item:hover {
+            border-color: #93c5fd;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+        }
+        .task-item.completed {
+            background: #f0fdf4;
+            border-color: #86efac;
+        }
+        .task-checkbox {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #2563eb;
+        }
+        .task-title {
+            flex: 1;
+            font-weight: 500;
+        }
+        .task-title.completed {
+            text-decoration: line-through;
+            color: #94a3b8;
+        }
+        .task-owner-tag {
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            background: #f1f5f9;
+            color: #64748b;
+            margin-right: 8px;
+        }
+        .task-visibility {
+            font-size: 12px;
+            color: #059669;
+        }
+        .progress-bar-container {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .progress-bar-fill {
+            background: #2563eb;
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .status-badge.in-progress {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .status-badge.completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status-badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .nav-button {
+            width: auto;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .no-data {
+            text-align: center;
+            padding: 30px;
+            color: #94a3b8;
+        }
+        .no-data-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        @media (max-width: 640px) {
+            .merchant-info-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .nav-button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">📋</div>
+            <h1>Onboarding Dashboard</h1>
+            <p>Manage merchant onboarding tasks and progress</p>
+        </div>
 
-// If no merchant ID, show error
-if (!merchantId) {
-    document.querySelector('.container').innerHTML = `
-        <div style="text-align: center; padding: 50px 20px;">
-            <div style="font-size: 48px; margin-bottom: 20px;">🔒</div>
-            <h2>Access Denied</h2>
-            <p style="color: #64748b;">No merchant ID provided. Please go back and submit a form.</p>
-            <button onclick="window.location.href='index.html'" style="margin-top: 20px; padding: 12px 30px; background: #2563eb; color: white; border: none; border-radius: 10px; cursor: pointer;">
-                Go to Form
+        <!-- Merchant Details Section -->
+        <div class="section" id="merchantDetails">
+            <h2>Merchant Information</h2>
+            <div id="merchantInfo">
+                <p style="color: #94a3b8;">Loading merchant details...</p>
+            </div>
+        </div>
+
+        <!-- Task List Section -->
+        <div class="section" id="taskSection">
+            <h2>Onboarding Task List</h2>
+            <div id="taskList">
+                <p style="color: #94a3b8;">No tasks available</p>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+            <button onclick="window.location.href='index.html'" class="nav-button" style="background: #64748b; color: white;">
+                ← Back to Form
+            </button>
+            <button onclick="window.location.href='merchant.html?merchantId=' + getMerchantId()" class="nav-button" style="background: #059669; color: white;">
+                👤 View Merchant Progress
+            </button>
+            <button onclick="window.location.reload()" class="nav-button" style="background: #2563eb; color: white;">
+                🔄 Refresh
             </button>
         </div>
-    `;
-    throw new Error('No merchant ID provided');
-}
+    </div>
 
-// DOM Elements
-const merchantInfo = document.getElementById('merchantInfo');
-const taskList = document.getElementById('taskList');
-
-// Helper functions
-function getMerchantData() {
-    const storedData = localStorage.getItem(`merchant_${merchantId}`);
-    if (storedData) {
-        return JSON.parse(storedData);
-    }
-    return null;
-}
-
-function getTasks() {
-    const storedTasks = localStorage.getItem(`tasks_${merchantId}`);
-    if (storedTasks) {
-        return JSON.parse(storedTasks);
-    }
-    return [];
-}
-
-function saveTasks(tasks) {
-    localStorage.setItem(`tasks_${merchantId}`, JSON.stringify(tasks));
-}
-
-// Render merchant details
-function renderMerchantDetails() {
-    const merchant = getMerchantData();
-    
-    if (!merchant) {
-        merchantInfo.innerHTML = `
-            <div style="text-align: center; padding: 20px; color: #ef4444;">
-                <p>❌ Merchant not found</p>
-            </div>
-        `;
-        return;
-    }
-    
-    // Calculate progress for status
-    const tasks = getTasks();
-    const completedTasks = tasks.filter(t => t.completed).length;
-    const totalTasks = tasks.length;
-    const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-    
-    let statusText = 'In Progress';
-    let statusClass = 'in-progress';
-    if (progress === 100 && totalTasks > 0) {
-        statusText = '✅ Completed';
-        statusClass = 'completed';
-    } else if (progress === 0) {
-        statusText = '⏳ Not Started';
-        statusClass = 'pending';
-    }
-    
-    merchantInfo.innerHTML = `
-        <div class="merchant-info-grid">
-            <div class="info-item">
-                <span class="info-label">Company Name</span>
-                <span class="info-value">${merchant.companyName || '-'}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Business Name</span>
-                <span class="info-value">${merchant.businessName || '-'}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Address</span>
-                <span class="info-value">${merchant.address || '-'}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">PIC Name</span>
-                <span class="info-value">${merchant.picName || '-'}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Phone</span>
-                <span class="info-value">${merchant.phone || '-'}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Package</span>
-                <span class="info-value">${merchant.package || '-'}</span>
-            </div>
-        </div>
-        ${merchant.notes && merchant.notes !== 'None' ? `<p style="margin-top: 12px;"><strong>Special Requirements:</strong> ${merchant.notes}</p>` : ''}
-        <div style="margin-top: 15px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
-            <span class="status-badge ${statusClass}">${statusText}</span>
-            <span style="font-size: 14px; color: #64748b;">Progress: ${progress}% complete</span>
-        </div>
-    `;
-}
-
-// Render tasks
-function renderTasks() {
-    const tasks = getTasks();
-    
-    if (tasks.length === 0) {
-        taskList.innerHTML = `
-            <div class="no-data">
-                <div class="no-data-icon">📝</div>
-                <p>No tasks assigned yet</p>
-            </div>
-        `;
-        return;
-    }
-    
-    const totalTasks = tasks.length;
-    const completedTasks = tasks.filter(task => task.completed).length;
-    const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-    
-    let html = `
-        <div style="margin-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                <span style="font-size: 14px; color: #64748b;">${completedTasks} of ${totalTasks} tasks completed</span>
-                <span style="font-weight: 600; color: #1e3a8a;">${progress}%</span>
-            </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar-fill" style="width: ${progress}%;"></div>
-            </div>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-    `;
-    
-    tasks.forEach(task => {
-        const ownerLabel = task.owner === 'merchant' ? '👤 Merchant' : '👥 Onboarding';
-        const isCompleted = task.completed;
-        html += `
-            <div class="task-item ${isCompleted ? 'completed' : ''}">
-                <input type="checkbox" 
-                       data-task-id="${task.id}" 
-                       ${isCompleted ? 'checked' : ''} 
-                       class="task-checkbox">
-                <span class="task-title ${isCompleted ? 'completed' : ''}">${task.title}</span>
-                <span class="task-owner-tag">${ownerLabel}</span>
-                ${task.visibleToMerchant ? '<span class="task-visibility">👁️</span>' : '<span style="font-size: 11px; color: #94a3b8;">🔒 Internal</span>'}
-            </div>
-        `;
-    });
-    
-    html += `</div>`;
-    taskList.innerHTML = html;
-    
-    // Add event listeners to checkboxes
-    document.querySelectorAll('.task-checkbox').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const taskId = parseInt(this.dataset.taskId);
-            const tasks = getTasks();
-            const task = tasks.find(t => t.id === taskId);
-            if (task) {
-                task.completed = this.checked;
-                saveTasks(tasks);
-                
-                // Re-render everything to update progress
-                renderTasks();
-                renderMerchantDetails();
-            }
-        });
-    });
-}
-
-// Helper function for navigation
-function getMerchantId() {
-    return merchantId;
-}
-
-// Expose globally for onclick
-window.getMerchantId = getMerchantId;
-
-// Initialize page
-renderMerchantDetails();
-renderTasks();
-
-// Auto-refresh tasks and details every 30 seconds
-setInterval(() => {
-    renderTasks();
-    renderMerchantDetails();
-}, 30000);
-
-console.log('✅ Onboarding dashboard loaded for merchant ID:', merchantId);
+    <script src="onboarding.js"></script>
+</body>
+</html>
