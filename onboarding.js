@@ -9,7 +9,7 @@ if (!merchantId) {
             <div style="font-size: 48px; margin-bottom: 20px;">🔒</div>
             <h2>Access Denied</h2>
             <p style="color: #64748b;">No merchant ID provided. Please go back and submit a form.</p>
-            <button onclick="window.location.href='index.html'" style="margin-top: 20px; width: auto; padding: 12px 30px; background: #2563eb; color: white; border: none; border-radius: 10px; cursor: pointer;">
+            <button onclick="window.location.href='index.html'" style="margin-top: 20px; padding: 12px 30px; background: #2563eb; color: white; border: none; border-radius: 10px; cursor: pointer;">
                 Go to Form
             </button>
         </div>
@@ -20,10 +20,6 @@ if (!merchantId) {
 // DOM Elements
 const merchantInfo = document.getElementById('merchantInfo');
 const taskList = document.getElementById('taskList');
-const messagesList = document.getElementById('messagesList');
-const chatForm = document.getElementById('chatForm');
-const chatInput = document.getElementById('chatInput');
-const messagesContainer = document.getElementById('messagesContainer');
 
 // Helper functions
 function getMerchantData() {
@@ -44,18 +40,6 @@ function getTasks() {
 
 function saveTasks(tasks) {
     localStorage.setItem(`tasks_${merchantId}`, JSON.stringify(tasks));
-}
-
-function getMessages() {
-    const storedMessages = localStorage.getItem(`messages_${merchantId}`);
-    if (storedMessages) {
-        return JSON.parse(storedMessages);
-    }
-    return [];
-}
-
-function saveMessages(messages) {
-    localStorage.setItem(`messages_${merchantId}`, JSON.stringify(messages));
 }
 
 // Render merchant details
@@ -110,16 +94,8 @@ function renderMerchantDetails() {
                 <span class="info-value">${merchant.phone || '-'}</span>
             </div>
             <div class="info-item">
-                <span class="info-label">Email</span>
-                <span class="info-value">${merchant.email || '-'}</span>
-            </div>
-            <div class="info-item">
                 <span class="info-label">Package</span>
                 <span class="info-value">${merchant.package || '-'}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">POS Quantity</span>
-                <span class="info-value">${merchant.posQty || '1'}</span>
             </div>
         </div>
         ${merchant.notes && merchant.notes !== 'None' ? `<p style="margin-top: 12px;"><strong>Special Requirements:</strong> ${merchant.notes}</p>` : ''}
@@ -136,8 +112,8 @@ function renderTasks() {
     
     if (tasks.length === 0) {
         taskList.innerHTML = `
-            <div style="text-align: center; padding: 30px; color: #94a3b8;">
-                <div style="font-size: 32px; margin-bottom: 10px;">📝</div>
+            <div class="no-data">
+                <div class="no-data-icon">📝</div>
                 <p>No tasks assigned yet</p>
             </div>
         `;
@@ -193,90 +169,10 @@ function renderTasks() {
                 // Re-render everything to update progress
                 renderTasks();
                 renderMerchantDetails();
-                
-                // Add system message when task is completed
-                if (this.checked) {
-                    const messages = getMessages();
-                    messages.push({
-                        sender: 'System',
-                        text: `✅ Task "${task.title}" has been completed by onboarding team.`,
-                        timestamp: new Date().toISOString()
-                    });
-                    saveMessages(messages);
-                    renderMessages();
-                }
             }
         });
     });
 }
-
-// Render messages
-function renderMessages() {
-    const messages = getMessages();
-    
-    if (messages.length === 0) {
-        messagesList.innerHTML = `
-            <div style="text-align: center; padding: 30px; color: #94a3b8;">
-                <div style="font-size: 32px; margin-bottom: 10px;">💬</div>
-                <p>No messages yet. Start a conversation!</p>
-            </div>
-        `;
-        return;
-    }
-    
-    let html = '';
-    messages.forEach(msg => {
-        let senderClass = 'system';
-        let senderName = msg.sender;
-        
-        if (msg.sender === 'Merchant') {
-            senderClass = 'merchant';
-            senderName = 'Merchant';
-        } else if (msg.sender === 'Onboarding Team' || msg.sender === 'Onboarding') {
-            senderClass = 'onboarding';
-            senderName = 'Onboarding Team';
-        } else if (msg.sender === 'System') {
-            senderClass = 'system';
-            senderName = 'System';
-        } else {
-            senderClass = 'system';
-        }
-        
-        html += `
-            <div class="chat-message ${senderClass}">
-                <div class="message-bubble">
-                    <span class="message-sender">${senderName}</span>
-                    ${msg.text}
-                    <span class="message-time">${new Date(msg.timestamp).toLocaleString()}</span>
-                </div>
-            </div>
-        `;
-    });
-    
-    messagesList.innerHTML = html;
-    
-    // Scroll to bottom
-    if (messagesContainer) {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-}
-
-// Handle chat submission
-chatForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const message = chatInput.value.trim();
-    if (!message) return;
-    
-    const messages = getMessages();
-    messages.push({
-        sender: 'Onboarding Team',
-        text: message,
-        timestamp: new Date().toISOString()
-    });
-    saveMessages(messages);
-    chatInput.value = '';
-    renderMessages();
-});
 
 // Helper function for navigation
 function getMerchantId() {
@@ -289,12 +185,6 @@ window.getMerchantId = getMerchantId;
 // Initialize page
 renderMerchantDetails();
 renderTasks();
-renderMessages();
-
-// Auto-refresh messages every 15 seconds
-setInterval(() => {
-    renderMessages();
-}, 15000);
 
 // Auto-refresh tasks and details every 30 seconds
 setInterval(() => {
@@ -303,3 +193,4 @@ setInterval(() => {
 }, 30000);
 
 console.log('✅ Onboarding dashboard loaded for merchant ID:', merchantId);
+console.log('💬 Chat button will open chat.html?merchantId=' + merchantId);
