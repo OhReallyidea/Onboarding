@@ -1,236 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Merchant Onboarding</title>
+<title>Merchant Onboarding</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-<div class="background">
+<div class="container">
 
-    <div class="circle circle1"></div>
-    <div class="circle circle2"></div>
-    <div class="circle circle3"></div>
+    <div class="header">
 
-</div>
+        <div class="logo">🏪</div>
 
-<div class="wrapper">
-
-    <div class="left-panel">
-
-        <div class="logo">
-
-            🏪
-
-        </div>
-
-        <h1>Merchant<br>Onboarding</h1>
+        <h1>Merchant Onboarding</h1>
 
         <p>
-
-            Register your merchant account with our secure onboarding platform.
-
+            Complete the form below to register a new merchant.
         </p>
-
-        <div class="features">
-
-            <div class="feature">
-                ✔ Fast Registration
-            </div>
-
-            <div class="feature">
-                ✔ Secure Submission
-            </div>
-
-            <div class="feature">
-                ✔ Easy Merchant Setup
-            </div>
-
-        </div>
 
     </div>
 
-    <div class="form-panel">
+    <form id="merchantForm">
 
-        <form id="merchantForm">
+        <div class="section">
 
-            <h2>Merchant Registration</h2>
+            <h2>Company Information</h2>
 
-            <p class="subtitle">
-                Please complete all required information.
-            </p>
+            <div class="form-group">
 
-            <div class="card">
+                <label>Company SSM Name</label>
 
-                <h3>🏢 Company Information</h3>
+                <input
+                    type="text"
+                    id="companyName"
+                    placeholder="ABC Sdn. Bhd."
+                    required>
 
-                <div class="row">
+            </div>
 
-                    <div class="field">
+            <div class="form-group">
 
-                        <label>Company SSM Name</label>
+                <label>Business Name</label>
 
-                        <input
-                            type="text"
-                            id="companyName"
-                            placeholder="ABC Sdn Bhd"
-                            required>
+                <input
+                    type="text"
+                    id="businessName"
+                    placeholder="ABC Cafe">
 
-                    </div>
+            </div>
 
-                    <div class="field">
+            <div class="form-group">
 
-                        <label>SSM Number</label>
+                <label>Store Address</label>
 
-                        <input
-                            type="text"
-                            id="ssmNumber"
-                            placeholder="202401234567">
+                <textarea
+                    id="address"
+                    rows="4"
+                    placeholder="Enter store address"></textarea>
 
-                    </div>
+            </div>
 
-                </div>
+        </div>
 
-                <div class="field">
+        <div class="section">
 
-                    <label>Business Name</label>
+            <h2>Business PIC</h2>
+
+            <div class="row">
+
+                <div class="form-group">
+
+                    <label>PIC Name</label>
 
                     <input
                         type="text"
-                        id="businessName"
-                        placeholder="ABC Cafe">
+                        id="picName"
+                        placeholder="John Tan">
 
                 </div>
 
-                <div class="field">
+                <div class="form-group">
 
-                    <label>Store Address</label>
-
-                    <textarea
-                        id="address"
-                        rows="4"
-                        placeholder="Enter store address"></textarea>
-
-                </div>
-
-            </div>
-
-            <div class="card">
-
-                <h3>👤 Business PIC</h3>
-
-                <div class="row">
-
-                    <div class="field">
-
-                        <label>PIC Name</label>
-
-                        <input
-                            type="text"
-                            id="picName"
-                            placeholder="John Tan">
-
-                    </div>
-
-                    <div class="field">
-
-                        <label>Phone Number</label>
-
-                        <input
-                            type="tel"
-                            id="phone"
-                            placeholder="0123456789">
-
-                    </div>
-
-                </div>
-
-                <div class="field">
-
-                    <label>Email Address</label>
+                    <label>Phone Number</label>
 
                     <input
-                        type="email"
-                        id="email"
-                        placeholder="merchant@email.com">
+                        type="tel"
+                        id="phone"
+                        placeholder="012-3456789">
 
                 </div>
 
             </div>
 
-            <div class="card">
+        </div>
 
-                <h3>💳 Merchant Requirements</h3>
+        <div class="section">
 
-                <div class="row">
+            <h2>Merchant Requirements</h2>
 
-                    <div class="field">
+            <div class="form-group">
 
-                        <label>POS Package</label>
+                <label>POS Package</label>
 
-                        <select id="package">
+                <select id="package">
 
-                            <option>Basic</option>
+                    <option>Lite</option>
 
-                            <option>Standard</option>
+                    <option>Standard</option>
 
-                            <option>Premium</option>
+                    <option>Premium</option>
 
-                        </select>
-
-                    </div>
-
-                    <div class="field">
-
-                        <label>Number of POS</label>
-
-                        <input
-                            type="number"
-                            id="posQty"
-                            value="1">
-
-                    </div>
-
-                </div>
-
-                <div class="field">
-
-                    <label>Special Requirements</label>
-
-                    <textarea
-                        id="notes"
-                        rows="4"
-                        placeholder="Additional requests..."></textarea>
-
-                </div>
+                </select>
 
             </div>
 
-            <button type="submit">
+            <div class="form-group">
 
-                Submit Application →
+                <label>Special Requirements</label>
 
-            </button>
+                <textarea
+                    id="notes"
+                    rows="4"
+                    placeholder="Any additional requests..."></textarea>
 
-        </form>
+            </div>
 
-    </div>
+        </div>
+
+        <button type="submit">
+
+            Submit Application
+
+        </button>
+
+    </form>
 
 </div>
 
 <script src="script.js"></script>
 
 </body>
-
 </html>
