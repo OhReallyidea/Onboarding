@@ -193,4 +193,3 @@ setInterval(() => {
 }, 30000);
 
 console.log('✅ Onboarding dashboard loaded for merchant ID:', merchantId);
-console.log('💬 Chat button will open chat.html?merchantId=' + merchantId);
