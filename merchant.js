@@ -31,8 +31,9 @@ const displayCompany = document.getElementById('displayCompany');
 const displayBusiness = document.getElementById('displayBusiness');
 const displayPIC = document.getElementById('displayPIC');
 const displayPhone = document.getElementById('displayPhone');
-const displayEmail = document.getElementById('displayEmail');
+// EMAIL REMOVED
 const displayPackage = document.getElementById('displayPackage');
+// POS QUANTITY REMOVED
 
 // Helper functions
 function getMerchantData() {
@@ -77,8 +78,9 @@ function renderMerchantInfo() {
     displayBusiness.textContent = merchant.businessName || '-';
     displayPIC.textContent = merchant.picName || '-';
     displayPhone.textContent = merchant.phone || '-';
-    displayEmail.textContent = merchant.email || '-';
+    // EMAIL REMOVED
     displayPackage.textContent = merchant.package || '-';
+    // POS QUANTITY REMOVED
 }
 
 // Render checklist
