@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merchant Progress</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Additional merchant-specific styles */
+        .progress-ring {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .circular-progress {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .circular-progress .percentage {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        .circular-progress .label {
+            font-size: 12px;
+            color: #64748b;
+            position: absolute;
+            bottom: 25px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .status-badge.in-progress {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .status-badge.completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+        .task-item:hover {
+            border-color: #93c5fd;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+        }
+        .task-item.completed {
+            background: #f0fdf4;
+            border-color: #86efac;
+        }
+        .task-icon {
+            font-size: 20px;
+            margin-right: 12px;
+        }
+        .task-title {
+            flex: 1;
+            font-weight: 500;
+        }
+        .task-title.completed {
+            text-decoration: line-through;
+            color: #94a3b8;
+        }
+        .task-owner-tag {
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            background: #f1f5f9;
+            color: #64748b;
+        }
+        .chat-message {
+            margin-bottom: 12px;
+            display: flex;
+        }
+        .chat-message.system {
+            justify-content: center;
+        }
+        .chat-message.merchant {
+            justify-content: flex-end;
+        }
+        .chat-message.onboarding {
+            justify-content: flex-start;
+        }
+        .message-bubble {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            word-wrap: break-word;
+        }
+        .chat-message.merchant .message-bubble {
+            background: #2563eb;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-message.onboarding .message-bubble {
+            background: #f1f5f9;
+            color: #1e293b;
+            border-bottom-left-radius: 4px;
+        }
+        .chat-message.system .message-bubble {
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 13px;
+        }
+        .message-sender {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 3px;
+            display: block;
+        }
+        .message-time {
+            font-size: 10px;
+            opacity: 0.6;
+            margin-top: 4px;
+            display: block;
+        }
+        .chat-container {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            background: white;
+        }
+        .messages-scroll {
+            max-height: 320px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+            padding-right: 8px;
+        }
+        .messages-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .messages-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+        .messages-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .messages-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .merchant-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .info-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .info-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1e293b;
+            margin-top: 4px;
+        }
+        @media (max-width: 640px) {
+            .merchant-info-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .circular-progress {
+                width: 100px;
+                height: 100px;
+            }
+            .circular-progress .percentage {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">📊</div>
+            <h1>Your Onboarding Progress</h1>
+            <p>Track your merchant onboarding journey</p>
+        </div>
+
+        <!-- Status Overview -->
+        <div class="section" style="background: linear-gradient(135deg, #eff6ff, #dbeafe); border: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <div>
+                    <h2 style="margin: 0; font-size: 22px; color: #1e3a8a;" id="merchantNameDisplay">Loading...</h2>
+                    <div style="margin-top: 8px;">
+                        <span class="status-badge in-progress" id="statusBadge">In Progress</span>
+                    </div>
+                </div>
+                <div class="progress-ring">
+                    <div class="circular-progress">
+                        <span class="percentage" id="progressPercentage">0%</span>
+                        <span class="label">Complete</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Merchant Details -->
+        <div class="section">
+            <h2>Merchant Information</h2>
+            <div class="merchant-info-grid" id="merchantInfo">
+                <div class="info-item">
+                    <span class="info-label">Company</span>
+                    <span class="info-value" id="displayCompany">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Business Name</span>
+                    <span class="info-value" id="displayBusiness">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">PIC Name</span>
+                    <span class="info-value" id="displayPIC">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Phone</span>
+                    <span class="info-value" id="displayPhone">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Email</span>
+                    <span class="info-value" id="displayEmail">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Package</span>
+                    <span class="info-value" id="displayPackage">-</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="section">
+            <h2>📋 Your Checklist</h2>
+            <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">These are the tasks you need to complete for onboarding</p>
+            <div id="checklistContainer">
+                <p>Loading checklist...</p>
+            </div>
+        </div>
+
+        <!-- Chat Section -->
+        <div class="section">
+            <h2>💬 Support Chat</h2>
+            <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">Chat with our onboarding team for assistance</p>
+            <div class="chat-container">
+                <div class="messages-scroll" id="messagesContainer">
+                    <div id="messagesList">
+                        <p style="color: #94a3b8; text-align: center;">No messages yet</p>
+                    </div>
+                </div>
+                <form id="chatForm" style="display: flex; gap: 10px;">
+                    <input type="text" id="chatInput" placeholder="Type your message..." 
+                           style="flex: 1; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 14px; transition: 0.3s;">
+                    <button type="submit" style="width: auto; padding: 12px 30px; background: #2563eb; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.3s;">
+                        Send
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+            <button onclick="window.location.href='index.html'" style="background: #64748b; width: auto; padding: 12px 25px;">
+                ← Back to Form
+            </button>
+            <button onclick="window.location.href='onboarding.html?merchantId=' + getMerchantId()" style="background: #2563eb; width: auto; padding: 12px 25px;">
+                View Onboarding Dashboard →
+            </button>
+            <button onclick="window.location.reload()" style="background: #8b5cf6; width: auto; padding: 12px 25px;">
+                🔄 Refresh Progress
+            </button>
+        </div>
+    </div>
+
+    <script src="merchant.js"></script>
+</body>
+</html>
