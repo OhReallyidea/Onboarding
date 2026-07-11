@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,124 +8,229 @@
     <title>Merchant Onboarding</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="container">
+<div class="background">
 
-    <div class="header">
-        <h1>Merchant Onboarding</h1>
-        <p>Complete the merchant registration below.</p>
+    <div class="circle circle1"></div>
+    <div class="circle circle2"></div>
+    <div class="circle circle3"></div>
+
+</div>
+
+<div class="wrapper">
+
+    <div class="left-panel">
+
+        <div class="logo">
+
+            🏪
+
+        </div>
+
+        <h1>Merchant<br>Onboarding</h1>
+
+        <p>
+
+            Register your merchant account with our secure onboarding platform.
+
+        </p>
+
+        <div class="features">
+
+            <div class="feature">
+                ✔ Fast Registration
+            </div>
+
+            <div class="feature">
+                ✔ Secure Submission
+            </div>
+
+            <div class="feature">
+                ✔ Easy Merchant Setup
+            </div>
+
+        </div>
+
     </div>
 
-    <form id="merchantForm">
+    <div class="form-panel">
 
-        <!-- Company Information -->
+        <form id="merchantForm">
 
-        <div class="card">
+            <h2>Merchant Registration</h2>
 
-            <h2>🏢 Company Information</h2>
+            <p class="subtitle">
+                Please complete all required information.
+            </p>
 
-            <div class="row">
+            <div class="card">
 
-                <div class="field">
-                    <label>Company SSM Name</label>
-                    <input type="text" id="companyName" required>
+                <h3>🏢 Company Information</h3>
+
+                <div class="row">
+
+                    <div class="field">
+
+                        <label>Company SSM Name</label>
+
+                        <input
+                            type="text"
+                            id="companyName"
+                            placeholder="ABC Sdn Bhd"
+                            required>
+
+                    </div>
+
+                    <div class="field">
+
+                        <label>SSM Number</label>
+
+                        <input
+                            type="text"
+                            id="ssmNumber"
+                            placeholder="202401234567">
+
+                    </div>
+
                 </div>
 
                 <div class="field">
-                    <label>SSM Number</label>
-                    <input type="text" id="ssmNumber">
-                </div>
 
-            </div>
+                    <label>Business Name</label>
 
-            <div class="field">
-                <label>Business Name</label>
-                <input type="text" id="businessName">
-            </div>
+                    <input
+                        type="text"
+                        id="businessName"
+                        placeholder="ABC Cafe">
 
-            <div class="field">
-                <label>Store Address</label>
-                <textarea id="address" rows="4"></textarea>
-            </div>
-
-        </div>
-
-        <!-- PIC -->
-
-        <div class="card">
-
-            <h2>👤 Business PIC</h2>
-
-            <div class="row">
-
-                <div class="field">
-                    <label>PIC Name</label>
-                    <input type="text" id="picName">
                 </div>
 
                 <div class="field">
-                    <label>Phone Number</label>
-                    <input type="tel" id="phone">
-                </div>
 
-            </div>
+                    <label>Store Address</label>
 
-            <div class="field">
-                <label>Email Address</label>
-                <input type="email" id="email">
-            </div>
+                    <textarea
+                        id="address"
+                        rows="4"
+                        placeholder="Enter store address"></textarea>
 
-        </div>
-
-        <!-- Merchant -->
-
-        <div class="card">
-
-            <h2>💳 Merchant Requirements</h2>
-
-            <div class="row">
-
-                <div class="field">
-                    <label>POS Package</label>
-
-                    <select id="package">
-                        <option>Basic</option>
-                        <option>Standard</option>
-                        <option>Premium</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label>Number of POS</label>
-                    <input type="number" id="posQty" value="1">
                 </div>
 
             </div>
 
-            <div class="field">
-                <label>Special Requirements</label>
-                <textarea id="notes" rows="4"></textarea>
+            <div class="card">
+
+                <h3>👤 Business PIC</h3>
+
+                <div class="row">
+
+                    <div class="field">
+
+                        <label>PIC Name</label>
+
+                        <input
+                            type="text"
+                            id="picName"
+                            placeholder="John Tan">
+
+                    </div>
+
+                    <div class="field">
+
+                        <label>Phone Number</label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            placeholder="0123456789">
+
+                    </div>
+
+                </div>
+
+                <div class="field">
+
+                    <label>Email Address</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="merchant@email.com">
+
+                </div>
+
             </div>
 
-        </div>
+            <div class="card">
 
-        <div class="button-group">
+                <h3>💳 Merchant Requirements</h3>
+
+                <div class="row">
+
+                    <div class="field">
+
+                        <label>POS Package</label>
+
+                        <select id="package">
+
+                            <option>Basic</option>
+
+                            <option>Standard</option>
+
+                            <option>Premium</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="field">
+
+                        <label>Number of POS</label>
+
+                        <input
+                            type="number"
+                            id="posQty"
+                            value="1">
+
+                    </div>
+
+                </div>
+
+                <div class="field">
+
+                    <label>Special Requirements</label>
+
+                    <textarea
+                        id="notes"
+                        rows="4"
+                        placeholder="Additional requests..."></textarea>
+
+                </div>
+
+            </div>
+
             <button type="submit">
-                Submit Application
-            </button>
-        </div>
 
-    </form>
+                Submit Application →
+
+            </button>
+
+        </form>
+
+    </div>
 
 </div>
 
 <script src="script.js"></script>
 
 </body>
+
 </html>
