@@ -3,18 +3,17 @@ document.getElementById("merchantForm").addEventListener("submit", function(e) {
     
     console.log("🔵 Form submitted!");
     
-    // Get all form values (email removed)
+    // Get all form values (POS quantity removed)
     const companyName = document.getElementById("companyName").value;
     const businessName = document.getElementById("businessName").value;
     const address = document.getElementById("address").value;
     const picName = document.getElementById("picName").value;
     const phone = document.getElementById("phone").value;
     const packageVal = document.getElementById("package").value;
-    const posQty = document.getElementById("posQty").value;
     const notes = document.getElementById("notes").value;
     
     console.log("📝 Form Values:", {
-        companyName, businessName, address, picName, phone, packageVal, posQty, notes
+        companyName, businessName, address, picName, phone, packageVal, notes
     });
 
     const merchant = {
@@ -23,9 +22,8 @@ document.getElementById("merchantForm").addEventListener("submit", function(e) {
         address: address || "Not provided",
         picName: picName || "Not provided",
         phone: phone || "Not provided",
-        // EMAIL REMOVED FROM HERE
         package: packageVal || "Standard",
-        posQty: posQty || "1",
+        // POS QUANTITY REMOVED
         notes: notes || "None"
     };
 
