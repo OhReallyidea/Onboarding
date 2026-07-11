@@ -1,25 +1,37 @@
-document.getElementById("merchantForm").addEventListener("submit", function(e){
+document.getElementById("merchantForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
+    // Get all form values with fallbacks
     const merchant = {
-        companyName: document.getElementById("companyName").value,
-        businessName: document.getElementById("businessName").value || document.getElementById("companyName").value,
-        address: document.getElementById("address").value,
-        picName: document.getElementById("picName").value,
-        phone: document.getElementById("phone").value,
+        companyName: document.getElementById("companyName").value || "Not provided",
+        businessName: document.getElementById("businessName").value || document.getElementById("companyName").value || "Not provided",
+        address: document.getElementById("address").value || "Not provided",
+        picName: document.getElementById("picName").value || "Not provided",
+        phone: document.getElementById("phone").value || "Not provided",
         email: document.getElementById("email").value || "Not provided",
-        package: document.getElementById("package").value,
+        package: document.getElementById("package").value || "Standard",
         posQty: document.getElementById("posQty").value || "1",
         notes: document.getElementById("notes").value || "None"
     };
 
+    // Log the data to check
+    console.log("📝 Merchant Data:", merchant);
+
     // Generate a unique merchant ID
     const merchantId = 'merchant_' + Date.now();
+    console.log("🆔 Generated Merchant ID:", merchantId);
 
-    // Save merchant data
-    localStorage.setItem(`merchant_${merchantId}`, JSON.stringify(merchant));
+    // Save merchant data to localStorage
+    try {
+        localStorage.setItem(`merchant_${merchantId}`, JSON.stringify(merchant));
+        console.log("✅ Merchant data saved successfully!");
+    } catch (error) {
+        console.error("❌ Error saving merchant data:", error);
+        alert("Error saving data. Please try again.");
+        return;
+    }
 
-    // Create default tasks
+    // Create default onboarding tasks
     const defaultTasks = [
         { id: 1, title: 'Submit company registration document', owner: 'merchant', completed: false, visibleToMerchant: true },
         { id: 2, title: 'Submit bank account details', owner: 'merchant', completed: false, visibleToMerchant: true },
@@ -30,19 +42,32 @@ document.getElementById("merchantForm").addEventListener("submit", function(e){
         { id: 7, title: 'Send integration guide', owner: 'onboarding', completed: false, visibleToMerchant: true },
         { id: 8, title: 'Confirm go-live date', owner: 'merchant', completed: false, visibleToMerchant: true }
     ];
-    localStorage.setItem(`tasks_${merchantId}`, JSON.stringify(defaultTasks));
+
+    try {
+        localStorage.setItem(`tasks_${merchantId}`, JSON.stringify(defaultTasks));
+        console.log("✅ Tasks saved successfully!");
+    } catch (error) {
+        console.error("❌ Error saving tasks:", error);
+    }
 
     // Create initial welcome message
     const welcomeMessage = {
         sender: 'System',
-        text: `Merchant "${merchant.companyName}" has been onboarded. Welcome to the platform!`,
+        text: `🎉 Welcome! Merchant "${merchant.companyName}" has been onboarded. The onboarding team will assist you shortly.`,
         timestamp: new Date().toISOString()
     };
-    localStorage.setItem(`messages_${merchantId}`, JSON.stringify([welcomeMessage]));
 
-    console.log('✅ Merchant saved:', merchant);
-    console.log('🆔 Merchant ID:', merchantId);
+    try {
+        localStorage.setItem(`messages_${merchantId}`, JSON.stringify([welcomeMessage]));
+        console.log("✅ Welcome message saved!");
+    } catch (error) {
+        console.error("❌ Error saving messages:", error);
+    }
 
-    // Redirect to onboarding page
+    // Show success message
+    alert(`✅ Merchant "${merchant.companyName}" has been successfully registered!`);
+
+    // Redirect to onboarding page with merchant ID
+    console.log("🔄 Redirecting to onboarding page...");
     window.location.href = `onboarding.html?merchantId=${merchantId}`;
 });
