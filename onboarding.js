@@ -4,18 +4,28 @@ const merchantId = urlParams.get('merchantId');
 
 // If no merchant ID, show error
 if (!merchantId) {
-    document.getElementById('merchantInfo').innerHTML = '<p style="color: red;">❌ No merchant selected. Please go back and submit a form.</p>';
+    document.querySelector('.container').innerHTML = `
+        <div style="text-align: center; padding: 50px 20px;">
+            <div style="font-size: 48px; margin-bottom: 20px;">🔒</div>
+            <h2>Access Denied</h2>
+            <p style="color: #64748b;">No merchant ID provided. Please go back and submit a form.</p>
+            <button onclick="window.location.href='index.html'" style="margin-top: 20px; width: auto; padding: 12px 30px; background: #2563eb; color: white; border: none; border-radius: 10px; cursor: pointer;">
+                Go to Form
+            </button>
+        </div>
+    `;
     throw new Error('No merchant ID provided');
 }
 
 // DOM Elements
 const merchantInfo = document.getElementById('merchantInfo');
 const taskList = document.getElementById('taskList');
-const messagesDiv = document.getElementById('messages');
+const messagesList = document.getElementById('messagesList');
 const chatForm = document.getElementById('chatForm');
 const chatInput = document.getElementById('chatInput');
+const messagesContainer = document.getElementById('messagesContainer');
 
-// Function to get merchant data
+// Helper functions
 function getMerchantData() {
     const storedData = localStorage.getItem(`merchant_${merchantId}`);
     if (storedData) {
@@ -24,7 +34,6 @@ function getMerchantData() {
     return null;
 }
 
-// Function to get tasks
 function getTasks() {
     const storedTasks = localStorage.getItem(`tasks_${merchantId}`);
     if (storedTasks) {
@@ -33,7 +42,10 @@ function getTasks() {
     return [];
 }
 
-// Function to get messages
+function saveTasks(tasks) {
+    localStorage.setItem(`tasks_${merchantId}`, JSON.stringify(tasks));
+}
+
 function getMessages() {
     const storedMessages = localStorage.getItem(`messages_${merchantId}`);
     if (storedMessages) {
@@ -42,7 +54,6 @@ function getMessages() {
     return [];
 }
 
-// Function to save messages
 function saveMessages(messages) {
     localStorage.setItem(`messages_${merchantId}`, JSON.stringify(messages));
 }
@@ -52,30 +63,69 @@ function renderMerchantDetails() {
     const merchant = getMerchantData();
     
     if (!merchant) {
-        merchantInfo.innerHTML = '<p style="color: red;">❌ Merchant not found</p>';
+        merchantInfo.innerHTML = `
+            <div style="text-align: center; padding: 20px; color: #ef4444;">
+                <p>❌ Merchant not found</p>
+            </div>
+        `;
         return;
     }
     
+    // Calculate progress for status
+    const tasks = getTasks();
+    const completedTasks = tasks.filter(t => t.completed).length;
+    const totalTasks = tasks.length;
+    const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+    
+    let statusText = 'In Progress';
+    let statusClass = 'in-progress';
+    if (progress === 100 && totalTasks > 0) {
+        statusText = '✅ Completed';
+        statusClass = 'completed';
+    } else if (progress === 0) {
+        statusText = '⏳ Not Started';
+        statusClass = 'pending';
+    }
+    
     merchantInfo.innerHTML = `
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div>
-                <p><strong>Company Name:</strong> ${merchant.companyName}</p>
-                <p><strong>Business Name:</strong> ${merchant.businessName}</p>
-                <p><strong>Address:</strong> ${merchant.address}</p>
+        <div class="merchant-info-grid">
+            <div class="info-item">
+                <span class="info-label">Company Name</span>
+                <span class="info-value">${merchant.companyName || '-'}</span>
             </div>
-            <div>
-                <p><strong>PIC:</strong> ${merchant.picName}</p>
-                <p><strong>Phone:</strong> ${merchant.phone}</p>
-                <p><strong>Email:</strong> ${merchant.email}</p>
-                <p><strong>Package:</strong> ${merchant.package}</p>
-                <p><strong>POS Qty:</strong> ${merchant.posQty}</p>
+            <div class="info-item">
+                <span class="info-label">Business Name</span>
+                <span class="info-value">${merchant.businessName || '-'}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Address</span>
+                <span class="info-value">${merchant.address || '-'}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">PIC Name</span>
+                <span class="info-value">${merchant.picName || '-'}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Phone</span>
+                <span class="info-value">${merchant.phone || '-'}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Email</span>
+                <span class="info-value">${merchant.email || '-'}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Package</span>
+                <span class="info-value">${merchant.package || '-'}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">POS Quantity</span>
+                <span class="info-value">${merchant.posQty || '1'}</span>
             </div>
         </div>
-        ${merchant.notes && merchant.notes !== 'None' ? `<p><strong>Special Requirements:</strong> ${merchant.notes}</p>` : ''}
-        <div style="margin-top: 10px;">
-            <span style="background: #2563eb; color: white; padding: 5px 12px; border-radius: 20px; font-size: 14px;">
-                Status: In Progress
-            </span>
+        ${merchant.notes && merchant.notes !== 'None' ? `<p style="margin-top: 12px;"><strong>Special Requirements:</strong> ${merchant.notes}</p>` : ''}
+        <div style="margin-top: 15px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+            <span class="status-badge ${statusClass}">${statusText}</span>
+            <span style="font-size: 14px; color: #64748b;">Progress: ${progress}% complete</span>
         </div>
     `;
 }
@@ -83,8 +133,14 @@ function renderMerchantDetails() {
 // Render tasks
 function renderTasks() {
     const tasks = getTasks();
+    
     if (tasks.length === 0) {
-        taskList.innerHTML = '<p>No tasks available</p>';
+        taskList.innerHTML = `
+            <div style="text-align: center; padding: 30px; color: #94a3b8;">
+                <div style="font-size: 32px; margin-bottom: 10px;">📝</div>
+                <p>No tasks assigned yet</p>
+            </div>
+        `;
         return;
     }
     
@@ -94,32 +150,29 @@ function renderTasks() {
     
     let html = `
         <div style="margin-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                <span>Progress: ${completedTasks}/${totalTasks} tasks completed</span>
-                <span>${progress}%</span>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span style="font-size: 14px; color: #64748b;">${completedTasks} of ${totalTasks} tasks completed</span>
+                <span style="font-weight: 600; color: #1e3a8a;">${progress}%</span>
             </div>
-            <div style="background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden;">
-                <div style="background: #2563eb; height: 100%; width: ${progress}%; transition: width 0.3s;"></div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: ${progress}%;"></div>
             </div>
         </div>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
     `;
     
     tasks.forEach(task => {
         const ownerLabel = task.owner === 'merchant' ? '👤 Merchant' : '👥 Onboarding';
+        const isCompleted = task.completed;
         html += `
-            <div style="display: flex; align-items: center; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <div class="task-item ${isCompleted ? 'completed' : ''}">
                 <input type="checkbox" 
                        data-task-id="${task.id}" 
-                       ${task.completed ? 'checked' : ''} 
-                       style="margin-right: 15px; width: 20px; height: 20px; cursor: pointer;">
-                <span style="flex: 1; ${task.completed ? 'text-decoration: line-through; color: #94a3b8;' : ''}">
-                    ${task.title}
-                </span>
-                <span style="font-size: 12px; color: #64748b; background: #e2e8f0; padding: 4px 10px; border-radius: 12px;">
-                    ${ownerLabel}
-                </span>
-                ${task.visibleToMerchant ? '<span style="font-size: 12px; color: #059669; margin-left: 8px;">👁️</span>' : ''}
+                       ${isCompleted ? 'checked' : ''} 
+                       class="task-checkbox">
+                <span class="task-title ${isCompleted ? 'completed' : ''}">${task.title}</span>
+                <span class="task-owner-tag">${ownerLabel}</span>
+                ${task.visibleToMerchant ? '<span class="task-visibility">👁️</span>' : '<span style="font-size: 11px; color: #94a3b8;">🔒 Internal</span>'}
             </div>
         `;
     });
@@ -128,15 +181,30 @@ function renderTasks() {
     taskList.innerHTML = html;
     
     // Add event listeners to checkboxes
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    document.querySelectorAll('.task-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', function() {
             const taskId = parseInt(this.dataset.taskId);
             const tasks = getTasks();
             const task = tasks.find(t => t.id === taskId);
             if (task) {
                 task.completed = this.checked;
-                localStorage.setItem(`tasks_${merchantId}`, JSON.stringify(tasks));
+                saveTasks(tasks);
+                
+                // Re-render everything to update progress
                 renderTasks();
+                renderMerchantDetails();
+                
+                // Add system message when task is completed
+                if (this.checked) {
+                    const messages = getMessages();
+                    messages.push({
+                        sender: 'System',
+                        text: `✅ Task "${task.title}" has been completed by onboarding team.`,
+                        timestamp: new Date().toISOString()
+                    });
+                    saveMessages(messages);
+                    renderMessages();
+                }
             }
         });
     });
@@ -147,38 +215,53 @@ function renderMessages() {
     const messages = getMessages();
     
     if (messages.length === 0) {
-        messagesDiv.innerHTML = '<p style="color: #94a3b8;">No messages yet. Start the conversation!</p>';
+        messagesList.innerHTML = `
+            <div style="text-align: center; padding: 30px; color: #94a3b8;">
+                <div style="font-size: 32px; margin-bottom: 10px;">💬</div>
+                <p>No messages yet. Start a conversation!</p>
+            </div>
+        `;
         return;
     }
     
     let html = '';
     messages.forEach(msg => {
-        const isMerchant = msg.sender === 'Merchant';
-        const isSystem = msg.sender === 'System';
+        let senderClass = 'system';
+        let senderName = msg.sender;
+        
+        if (msg.sender === 'Merchant') {
+            senderClass = 'merchant';
+            senderName = 'Merchant';
+        } else if (msg.sender === 'Onboarding Team' || msg.sender === 'Onboarding') {
+            senderClass = 'onboarding';
+            senderName = 'Onboarding Team';
+        } else if (msg.sender === 'System') {
+            senderClass = 'system';
+            senderName = 'System';
+        } else {
+            senderClass = 'system';
+        }
+        
         html += `
-            <div style="display: flex; margin-bottom: 10px; ${isMerchant ? 'justify-content: flex-start;' : 'justify-content: flex-end;'}">
-                <div style="
-                    max-width: 70%; 
-                    padding: 12px 16px; 
-                    border-radius: 12px; 
-                    ${isSystem ? 'background: #fef3c7; color: #92400e;' : 
-                      isMerchant ? 'background: #f1f5f9;' : 
-                      'background: #2563eb; color: white;'}
-                ">
-                    <strong style="font-size: 12px;">${msg.sender}</strong>
-                    <div>${msg.text}</div>
-                    <div style="font-size: 10px; margin-top: 4px; opacity: 0.7;">
-                        ${new Date(msg.timestamp).toLocaleTimeString()}
-                    </div>
+            <div class="chat-message ${senderClass}">
+                <div class="message-bubble">
+                    <span class="message-sender">${senderName}</span>
+                    ${msg.text}
+                    <span class="message-time">${new Date(msg.timestamp).toLocaleString()}</span>
                 </div>
             </div>
         `;
     });
-    messagesDiv.innerHTML = html;
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    
+    messagesList.innerHTML = html;
+    
+    // Scroll to bottom
+    if (messagesContainer) {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
 }
 
-// Handle chat form submission
+// Handle chat submission
 chatForm.addEventListener('submit', function(e) {
     e.preventDefault();
     const message = chatInput.value.trim();
@@ -195,20 +278,28 @@ chatForm.addEventListener('submit', function(e) {
     renderMessages();
 });
 
-// Helper function to get merchant ID for navigation
+// Helper function for navigation
 function getMerchantId() {
     return merchantId;
 }
 
-// Expose function globally for button onclick
+// Expose globally for onclick
 window.getMerchantId = getMerchantId;
 
-// Initialize the page
+// Initialize page
 renderMerchantDetails();
 renderTasks();
 renderMessages();
 
-// Auto-refresh messages every 30 seconds (for demo)
+// Auto-refresh messages every 15 seconds
 setInterval(() => {
     renderMessages();
+}, 15000);
+
+// Auto-refresh tasks and details every 30 seconds
+setInterval(() => {
+    renderTasks();
+    renderMerchantDetails();
 }, 30000);
+
+console.log('✅ Onboarding dashboard loaded for merchant ID:', merchantId);
