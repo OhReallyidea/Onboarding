@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merchant Onboarding</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Merchant Onboarding Form</h1>
+
+    <form id="merchantForm">
+
+        <h2>Company Information</h2>
+
+        <label>Company SSM Name</label>
+        <input type="text" id="companyName" required>
+
+        <label>SSM Number</label>
+        <input type="text" id="ssmNumber">
+
+        <label>Business Name</label>
+        <input type="text" id="businessName">
+
+        <label>Store Address</label>
+        <textarea id="address"></textarea>
+
+        <h2>Business PIC</h2>
+
+        <label>PIC Name</label>
+        <input type="text" id="picName">
+
+        <label>Phone Number</label>
+        <input type="tel" id="phone">
+
+        <label>Email</label>
+        <input type="email" id="email">
+
+        <h2>Merchant Requirements</h2>
+
+        <label>POS Package</label>
+        <select id="package">
+            <option>Basic</option>
+            <option>Standard</option>
+            <option>Premium</option>
+        </select>
+
+        <label>Number of POS</label>
+        <input type="number" id="posQty" value="1">
+
+        <label>Special Requirements</label>
+        <textarea id="notes"></textarea>
+
+        <button type="submit">Submit</button>
+
+    </form>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
