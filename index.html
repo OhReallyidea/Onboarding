@@ -1,80 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Merchant Onboarding</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Form</title>
+    
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
+    
+    <!-- Your CSS -->
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
     <div class="container">
+
+        <!-- ===== HEADER ===== -->
         <div class="header">
-            <div class="logo">🏪</div>
-            <h1>Merchant Onboarding</h1>
-            <p>Complete the form below to register a new merchant.</p>
+            <div class="logo">✉</div>
+            <h1>Get in Touch</h1>
+            <p>We’d love to hear from you — fill out the form below.</p>
         </div>
 
-        <form id="merchantForm">
+        <!-- ===== FORM ===== -->
+        <form action="#" method="POST">
+
+            <!-- Section: Personal Info -->
             <div class="section">
-                <h2>Company Information</h2>
-                
-                <div class="form-group">
-                    <label>Company SSM Name</label>
-                    <input type="text" id="companyName" placeholder="ABC Sdn. Bhd." required>
-                </div>
+                <h2>Personal Information</h2>
 
-                <div class="form-group">
-                    <label>Business Name</label>
-                    <input type="text" id="businessName" placeholder="ABC Cafe">
-                </div>
-
-                <div class="form-group">
-                    <label>Store Address</label>
-                    <textarea id="address" rows="3" placeholder="Enter store address"></textarea>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2>Business PIC</h2>
                 <div class="row">
                     <div class="form-group">
-                        <label>PIC Name</label>
-                        <input type="text" id="picName" placeholder="John Tan" required>
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" placeholder="e.g. John" required />
                     </div>
                     <div class="form-group">
-                        <label>Phone Number</label>
-                        <input type="tel" id="phone" placeholder="012-3456789" required>
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" placeholder="e.g. Doe" required />
                     </div>
                 </div>
-            </div>
 
-            <div class="section">
-                <h2>Merchant Requirements</h2>
-                
                 <div class="form-group">
-                    <label>POS Package</label>
-                    <select id="package">
-                        <option value="Lite">Lite</option>
-                        <option value="Standard" selected>Standard</option>
-                        <option value="Premium">Premium</option>
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="you@example.com" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <select id="country">
+                        <option value="">Select your country</option>
+                        <option value="us">United States</option>
+                        <option value="uk">United Kingdom</option>
+                        <option value="ca">Canada</option>
+                        <option value="au">Australia</option>
+                        <option value="in">India</option>
+                        <option value="other">Other</option>
                     </select>
                 </div>
+            </div>
 
-                <!-- NUMBER OF POS SYSTEMS REMOVED -->
+            <!-- Section: Message -->
+            <div class="section">
+                <h2>Your Message</h2>
 
                 <div class="form-group">
-                    <label>Special Requirements</label>
-                    <textarea id="notes" rows="3" placeholder="Any additional requests..."></textarea>
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" placeholder="What's this about?" />
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" rows="4" placeholder="Write your message here…" required></textarea>
                 </div>
             </div>
 
-            <button type="submit">Submit Application</button>
+            <!-- Submit Button -->
+            <button type="submit">Send Message</button>
+
         </form>
+
     </div>
 
-    <script src="script.js"></script>
 </body>
 </html>
